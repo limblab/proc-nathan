@@ -1,6 +1,6 @@
 %% set file name and load file into cds
 
-    input_data.folderpath = 'C:\Users\nds4346\Desktop\Duncan_ringReporting\Duncan_RR_nathan_novision_20190905\';
+    input_data.folderpath = 'C:\Users\nds4346\Desktop\Duncan_ringReporting\Duncan_RR_nathan_vision_20190905\';
     input_data.mapFileName = 'mapFileR:\limblab\lab_folder\Animal-Miscellany\Duncan_17L1\mapfiles\left S1 20190205\SN 6251-002087.cmp';
 %     input_data.mapFileName = 'mapFileR:\limblab\lab_folder\Animal-Miscellany\Han_13B1\map files\Left S1\SN 6251-001459.cmp';
 
@@ -47,58 +47,57 @@
    %% get bump trials, plot tgt_dir vs reach_dir. 
 % plot percentage correct in bins around a polar plot
 
-    td_bump_novision = td_all(~isnan([td_all.bumpDir]));
+    td_bump_vision = td_all(~isnan([td_all.bumpDir]));
     
     % get pos at idx_endTime
-    reach_angles_bump = zeros(numel(td_bump_novision),1);
-    tgt_angles_bump = zeros(numel(td_bump_novision),1);
-    is_rewarded = zeros(numel(td_bump_novision),1);
-    for t = 1:numel(td_bump_novision)
-        tgt_angles_bump(t) = td_bump_novision(t).target_direction;
+    reach_angles_bump = zeros(numel(td_bump_vision),1);
+    tgt_angles_bump = zeros(numel(td_bump_vision),1);
+    is_rewarded = zeros(numel(td_bump_vision),1);
+    for t = 1:numel(td_bump_vision)
+        tgt_angles_bump(t) = td_bump_vision(t).target_direction;
         
-        reach_angles_bump(t) = getReachAngle(td_bump_novision,t,[input_data.center_x,input_data.center_y]);
+        reach_angles_bump(t) = getReachAngle(td_bump_vision,t,[input_data.center_x,input_data.center_y]);
         is_rewarded(t) = td_bump_novision(t).result == 'R';
         is_rewarded(t) = abs(reach_angles(t) - tgt_angles(t))*180/pi < input_data.tgt_width/2;
     end
-%     f=figure(); hold on
-%     f.Name = [input_data.monkey(7:end),'_',input_data.date,'_bump_reachVsTgt'];
-%     
-%     % unity black line
-%     plot([-180,180],[-180,180],'k--','linewidth',2);
-%     % error tolerance lines (4 to compensate for wrap arounds)
-%     plot([-180,180],[-180,180]+input_data.tgt_width/2,'r--','linewidth',2);
-%     plot([-180,180],[-180,180]+360-input_data.tgt_width/2,'r--','linewidth',2);
-%     
-%     plot([-180,180],[-180,180]-input_data.tgt_width/2*180/180,'r--','linewidth',2);
-%     plot([-180,180],[-180,180]-360+input_data.tgt_width/2,'r--','linewidth',2);
-%     
-%     % plot reach vs tgt
-%     plot(tgt_angles_bump*180/pi,reach_angles_bump*180/pi,'.','markersize',16)
-%     % format
-%     xlim([-180,180]); ylim([-180,180]);
-%     formatForLee(gcf); set(gca,'fontsize',14)
-%     xlabel('Tgt dir'); ylabel('Reach dir');
-%     
-%     % get percent correct in bins around a circle
-%     bin_edges = [-pi:2*pi/input_data.num_bins:pi];
-%     percent_correct = zeros(numel(bin_edges)-1,1);
-%     for i = 1:numel(bin_edges)-1
-%         trial_mask = tgt_angles_bump >= bin_edges(i) & tgt_angles_bump < bin_edges(i+1);
-%         percent_correct(i) = sum(is_rewarded(trial_mask))/sum(trial_mask);
-%     end
-%     
-%     f=figure();
-%     f.Name = [input_data.monkey(7:end),'_',input_data.date,'_bump_percentCorrect'];
-%     polarplot([bin_edges(1:end-1),bin_edges(1)]+mode(diff(bin_edges))/2,[percent_correct;percent_correct(1)],...
-%         '--.','markersize',20,'linewidth',2)
-%     f.Children(1).RLim = [0,1]; % radius limits from 0 to 1
-%     ax = gca;
-%     ax.ThetaTickLabel = {'0','30','60','90','120','150','180','-150','-120','-90','-60','-30'};
-%     %% Change bin size
-
+    f=figure(); hold on
+    f.Name = [input_data.monkey(7:end),'_',input_data.date,'_bump_reachVsTgt'];
+    
+    % unity black line
+    plot([-180,180],[-180,180],'k--','linewidth',2);
+    % error tolerance lines (4 to compensate for wrap arounds)
+    plot([-180,180],[-180,180]+input_data.tgt_width/2,'r--','linewidth',2);
+    plot([-180,180],[-180,180]+360-input_data.tgt_width/2,'r--','linewidth',2);
+    
+    plot([-180,180],[-180,180]-input_data.tgt_width/2*180/180,'r--','linewidth',2);
+    plot([-180,180],[-180,180]-360+input_data.tgt_width/2,'r--','linewidth',2);
+    
+    % plot reach vs tgt
+    plot(tgt_angles_bump*180/pi,reach_angles_bump*180/pi,'.','markersize',16)
+    % format
+    xlim([-180,180]); ylim([-180,180]);
+    formatForLee(gcf); set(gca,'fontsize',14)
+    xlabel('Tgt dir'); ylabel('Reach dir');
+    
+    % get percent correct in bins around a circle
+    bin_edges = [-pi:2*pi/input_data.num_bins:pi];
+    percent_correct = zeros(numel(bin_edges)-1,1);
+    for i = 1:numel(bin_edges)-1
+        trial_mask = tgt_angles_bump >= bin_edges(i) & tgt_angles_bump < bin_edges(i+1);
+        percent_correct(i) = sum(is_rewarded(trial_mask))/sum(trial_mask);
+    end
+    
+    f=figure();
+    f.Name = [input_data.monkey(7:end),'_',input_data.date,'_bump_percentCorrect'];
+    polarplot([bin_edges(1:end-1),bin_edges(1)]+mode(diff(bin_edges))/2,[percent_correct;percent_correct(1)],...
+        '--.','markersize',20,'linewidth',2)
+    f.Children(1).RLim = [0,1]; % radius limits from 0 to 1
+    ax = gca;
+    ax.ThetaTickLabel = {'0','30','60','90','120','150','180','-150','-120','-90','-60','-30'};
+  
 
 %% Bin size
-td_bump_vision = binTD(td_bump_vision, 20);
+td_bump_novision = binTD(td_bump_novision, 20);
  %% Git rid of non-reward trials
 reward_novision = td_bump_novision;
 
@@ -122,7 +121,7 @@ end
 %% align with movement
 moveParams.which_field = 'speed';
 moveParams.start_idx = 'idx_bumpTime';
-moveParams.end_idx = 'idx_endTime'; 
+moveParams.end_idx = 'idx_goCueTime'; 
 moveParams.which_method = 'peak';
 moveParams.s_thresh = 10;
 moveParams.min_ds = 1.9;
@@ -131,7 +130,7 @@ reward_vision= getMoveOnsetAndPeak(reward_vision,moveParams);
 
 %% Trim again to have movement onset to be the same
 for n = 1:numel(reward_vision)
-reward_vision(n) = trimTD(reward_vision(n), {reward_vision(n).idx_bumpTime+ 10},{(reward_vision(n).idx_bumpTime + 20)});
+reward_vision(n) = trimTD(reward_vision(n), {reward_vision(n).idx_startTime},{(reward_vision(n).idx_startTime+10)});
 end
 
 %% Smooth spikes
@@ -324,11 +323,11 @@ for bump = 1: numel(unique_bumpDir)
     f.Name = [input_data.monkey(7:end),'_',input_data.date,'_AllNeurons'];
     for x = 1:numel(reward_vision(1).LeftS1_spikes(1,:))
         subplot(8,9,x)
-        plot((spikes_vision(:,x,bump)/spike_trialVision(:,x,bump)/(reward_vision(n).bin_size)),'r')
+        plot((spikes_vision(:,x,bump)/spike_trialVision(:,x,bump)),'r')
         hold on 
-        plot((spikes_novision(:,x,bump)/spike_trialNoVision(:,x,bump)/(reward_novision(n).bin_size)),'b')
+        plot((spikes_novision(:,x,bump)/spike_trialNoVision(:,x,bump)),'b')
         xlim([0 11])
-        ylim([0 100])
+        ylim([0 40])
     end
 end
 
